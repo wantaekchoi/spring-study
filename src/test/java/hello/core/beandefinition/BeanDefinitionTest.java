@@ -1,35 +1,28 @@
-package hello.core.beanfind;
+package hello.core.beandefinition;
 
+import hello.core.beanfind.ApplicationContextExtendsFindTest;
 import hello.core.order.AppConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
-public class ApplicationContextInfoTest {
+public class BeanDefinitionTest {
 
     AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+//    GenericXmlApplicationContext ac = new GenericXmlApplicationContext("appConfig.xml");
 
     @Test
-    @DisplayName("모든 빈 출력하기")
-    void findAllBean() {
-        String[] beanDefinitionNames = ac.getBeanDefinitionNames();
-        for (String beanDefinitionName : beanDefinitionNames) {
-            Object bean = ac.getBean(beanDefinitionName);
-            System.out.println("name = " + beanDefinitionName + " object = " + bean);
-        }
-    }
-
-    @Test
-    @DisplayName("애플리케이션 빈 출력하기")
-    void findApplicationBeans() {
+    @DisplayName("빈 설정 메타정보 확인")
+    void findApplicationBeanDefinition() {
         String[] beanDefinitionNames = ac.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             BeanDefinition beanDefinition = ac.getBeanDefinition(beanDefinitionName);
             if (beanDefinition.getRole() == BeanDefinition.ROLE_APPLICATION) {
                 Object bean = ac.getBean(beanDefinitionName);
-                System.out.println("name = " + beanDefinitionName + " object = " + bean);
+                System.out.println("name = " + beanDefinitionName + " beanDefinition = " + beanDefinition);
             }
         }
     }

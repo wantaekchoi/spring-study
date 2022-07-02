@@ -5,6 +5,8 @@ import hello.core.order.AppConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.lang.model.SourceVersion;
 
@@ -15,13 +17,13 @@ public class SingletonTest {
     @Test
     @DisplayName("Spring이 없는 순수한 DI Container")
     void pureContainer() {
-        AppConfig ac = new AppConfig();
+        AppConfig appConfig = new AppConfig();
 
         // 1. 조회: 호출할 때 마다 객체를 생성
-        MemberService memberService1 = ac.memberService();
+        MemberService memberService1 = appConfig.memberService();
 
         // 2. 조회: 호출할 때 마다 객체를 생성
-        MemberService memberService2 = ac.memberService();
+        MemberService memberService2 = appConfig.memberService();
 
         // 3. 참조: 값이 다른 것을 확인
         System.out.println("memberService1 = " + memberService1);
@@ -45,5 +47,24 @@ public class SingletonTest {
 
         // 3. singletonService1 == singletonService2
         assertThat(singletonService1).isSameAs(singletonService2);
+    }
+
+    @Test
+    @DisplayName("Spring Container와 singleton")
+    void singletonContainer() {
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // 1. 조회: 호출할 때 마다 객체를 생성
+        MemberService memberService1 = applicationContext.getBean("memberService", MemberService.class);
+
+        // 2. 조회: 호출할 때 마다 객체를 생성
+        MemberService memberService2 = applicationContext.getBean("memberService", MemberService.class);
+
+        // 3. 참조: 값이 다른 것을 확인
+        System.out.println("memberService1 = " + memberService1);
+        System.out.println("memberService2 = " + memberService2);
+
+        // 4. memberService1 == memberService2
+        assertThat(memberService1).isSameAs(memberService2);
     }
 }

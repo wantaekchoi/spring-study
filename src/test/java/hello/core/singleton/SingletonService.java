@@ -12,8 +12,6 @@ public class SingletonService {
     }
 
     public void logic() {
-        System.out.println("싱글톤 객체(" + instance + ") 로직 호출 #" + calledCount++);
+        System.out.println("싱글톤 객체(" + instance + ") 로직 호출");
     }
-
-    private int calledCount = 0;
 }
